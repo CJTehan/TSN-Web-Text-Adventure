@@ -1,0 +1,29 @@
+body
+{
+    font-size: 20pt;
+    font-family: 'Trebuchet MS';
+    background-color: green;
+    
+}
+
+h1
+{
+    font-size: xx-large;
+    font-style: italic;
+    color: lightblue;
+}
+
+h2
+{
+    font-size: large;
+    font-weight: 400;
+    color: cyan;
+}
+
+
+p
+{
+    font-size: medium;
+    color: white;
+    font-variant: small-caps;
+}
