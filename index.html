@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adventure Game</title>
+</head>
+<body>
+    <div id="location">
+        <hi id="location-name"></hi>
+        <p id ="location-description"></p>
+        <ul id="location-items"></ul>
+    </div>
+    <div id="message"></div>
+    <form method = "POST" id = "action-form">
+        <input type = "hidden" name = "current_location" id = "current-location">
+        <button type = "submit" name = "action" value = "go">Go</button>
+        <button type = "submit" name = "direction" value = "north" {% if 'north' not in location.directions %}disabled{% endif %}>North</button>
+        <button type="submit" name = "action" value = "inventory">Inventory</button>
+        <button type = "submit" name = "action" value = "quit">Quit</button>
+    </form>
+    {% if 'items' in location and location.items %} <p>You see the following items:
+    </p>
+    <ul>
+        {% for item in location['itmes'] %} <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <script scr = script.js></script>
+</body>
+</html>
