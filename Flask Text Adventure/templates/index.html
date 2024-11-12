@@ -1,38 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Text Adventure</title>
-    <link rel= "stylesheet" href = "style.css">
+    <meta charset="UTF-8">
+    <title>Adventure Game</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-    <div id = "location">
-        <hi id = "location-name"></hi>
-        <p id = "location-description"></p>
-    </div>
-        
-    <div id = "message"></div>
-
-    <form method = "POST" id = "action-form">
-        <input type = "hidden" name = "current_location" id = "current-location">
-        <button type = "submit" name = "action" value = "go">Go</button>
-        <button type = "submit" name = "direction" value = 
-        "north" {% if "north" not in location. directions %}disabled{% endif %}>North</button>
-        <button type = "submit" name = "action" value = "inventory">Inventory</button>
-        <button type = "submit" name = "action" value = "quit">Quit</button>
-
-        {% if "items" in location and location.items %}
-        <p> You see the following items:
-        </p>
-        <ul>
-            {% for item in location["items"] %} <li>{{item }}</li>
+    <div id="location">
+        <h1 id="location-name">{{ location.name }}</h1>
+        <p id="location-description">{{ location.description }}</p>
+    <ul id="location-items">
+        {% if location.location_items %}
+            {% for item in location.location_items %}
+                <li>{{ item }}</li>
             {% endfor %}
-
-        </ul>
-
-    </form>
-    
-        <script> src = "script.js"</script>
+        {% else %}
+            <li>No items here</li>
+        {% endif %}
+    </ul>
     </div>
-    
+    <div id="message">{{ message }}</div>
+    <!-- Movement Buttons -->
+    <form id="action-form">
+        <div>
+            <button type="button" data-action="Go North" {% if 'north' not in location.directions %}disabled{% endif %}>Go North</button>
+            <button type="button" data-action="Go South" {% if 'south' not in location.directions %}disabled{% endif %}>Go South</button>
+            <button type="button" data-action="Go East" {% if 'east' not in location.directions %}disabled{% endif %}>Go East</button>
+            <button type="button" data-action="Go West" {% if 'west' not in location.directions %}disabled{% endif %}>Go West</button>
+        </div>
+        <!-- Get Item Button -->
+        <div>
+            <button type="button" data-action="get">Get</button>
+        </div>
+        <!-- Utility Buttons on Separate Lines -->
+        <div>
+            <button type="button" data-action="restart">Restart</button>
+        </div>
+        <div>
+            <button type="button" data-action="inventory">Inventory</button>
+        </div>
+        <div>
+            <button type="button" data-action="quit">Quit</button>
+        </div>
+    </form>
 </body>
-</html
+</html>

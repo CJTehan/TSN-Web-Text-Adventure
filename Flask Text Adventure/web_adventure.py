@@ -1,10 +1,11 @@
+import copy
 from flask import Flask, render_template, request, session, jsonify, redirect, url_for
 
 app = Flask(__name__)
 app.secret_key = "webgame123"
 
 # Game Data
-location = {
+locations = {
     'entrance':{
             'name': 'The Temple Entrance',
             'description': 'A grand archway leads into a dark and mysterious temple.',
@@ -20,9 +21,8 @@ location = {
             'description': 'This is where the legendary teasure is said to be hidden!',
             'directions': {'east': 'hallway'},
             # Add treasure and challenges here later
-
         },
-        'hallway':{
+        'treasury':{
             'name': 'The legendary treasure',
             'description': 'You enter a large open room with a chest directly in the centre of the room with only the light from the moon lighting the ground in front of you, unaware of the dangers lurking in front of you.',
             'directions': {'west': 'hallway', 'north': 'mysterious statue', 'south': 'an open chest'},
@@ -30,27 +30,32 @@ location = {
         
     }
 
+# Make a deep copy of the original locations to use for resetting
+original_locations = copy.deepcopy(locations)
+
 # --- Flask Routes ---
 @app.route("/", method = ["GET", "POST"])
 def index():
     # Intialise the game session
-    if "location" not in session:
-        session["location"] = "entrance" # Set initial location
-        session["inventory"] = [] # Initialise empty inventory
-        session ["message"] = "" # Initialis empty message
-        show_intro() # Display the intro text
-    
-    if request.method == "POST":
-        # Handle actions submitted through forms
-        action = request.form.get("action")
-        if action == "go":
-            direction = request.form.get("direction")
-            if direction:
-                return process_action(f"go {direction}") # Process go action
-        return process_action(action) # process other actions
-    else: # Request.method == "GET"
-        # Handle initial page load
-        show_current_location("entrance") # Display starting location info
+    if request.method == 'GET':
+        session.clear()
+        session['location'] = 'entrance'
+        session['inventory'] = []
+        session['message'] = ''
+        print("Initial location data being passed to template:", locations['entrance'])
+        print("Type of location items:", type(locations['entrance']['location_items']))
+        return render_template('index.html', location=locations['entrance'], inventory=session['inventory'], message='')
+    elif request.method == 'POST':
+        data = request.get_json()  # Use get_json() to read JSON data
+        action = data.get('action') if data else None
+        print(f"Action received in index: {action}")
+        if not action:
+            return jsonify({'message': 'No action provided.'}), 400
+        response = process_action(action)
+        if response:
+            return response
+        else:
+            return jsonify({'message': 'Action could not be processed.'}), 500
 
     # Render the template with game data
     message = session.pop("message", "") # Get and clear the message
@@ -74,19 +79,26 @@ def show_current_location(location, locations):
 
 def process_action(action):
     """Process the players action and return a JSON response"""
+    if action == 'restart':
+        session.clear()
+        session['location'] = 'entrance'
+# Reset the game locations to their original state
+        global locations
+        locations = copy.deepcopy(original_locations)
+        return show_current_location('entrance')
     if action == "quit":
         message = "Thanks for playing!"
-        return jsonify("all")
         
     elif action.startswith("go"):
         direction = action.split()[-1]
         app.route("/")
         
-
     elif action == "take":
-        
+        # Button for get action
+
 
     elif action == "inventory":
+        # Button to open inventory
 
     else:
         return jsonify({"message": "Invalid Action"})
@@ -94,15 +106,32 @@ def process_action(action):
 
 def move_player(direction):
     """Moves player to a new location if possible"""
+    current_location = session.get('location')
+    new_location = locations[current_location]['directions'].get(direction)
+    if new_location:
+        session['location'] = new_location  # Update the session with the new location
+        return jsonify({'location': new_location, 'message': f'You moved {direction} to {locations[new_location]["name"]}.'})
+    else:
+        return jsonify({'message': 'You cannot go that way.'})
 
-
-def take_item():
+def take_item(item):
     """Adds item to players inventory"""
+    if "items" in locations[location] and item in current_location[current_location]["items"]:
+        iventory.append(item)
+        locations[location]["items"].remove(item)
+        return jsonify("You take the", item)
+    else:
+        return jsonify("message": "There is no such item here.")
 
 def show_inventory(inventory):
     """Displays the players inventory"""
-
-
+    inventory = session.get('inventory', [])
+    if inventory:
+        print('\nYour inventory:')
+        for item in inventory:
+            print(f'{item}')
+    else:
+        print('\nYour inventory is empty.')
 
 
 if __name__ == "__main__":
