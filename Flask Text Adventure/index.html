@@ -1,29 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Adventure Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Adventure Game</title>
 </head>
 <body>
-    <div id="location">
-        <hi id="location-name"></hi>
-        <p id ="location-description"></p>
-        <ul id="location-items"></ul>
-    </div>
-    <div id="message"></div>
-    <form method = "POST" id = "action-form">
-        <input type = "hidden" name = "current_location" id = "current-location">
-        <button type = "submit" name = "action" value = "go">Go</button>
-        <button type = "submit" name = "direction" value = "north" {% if 'north' not in location.directions %}disabled{% endif %}>North</button>
-        <button type="submit" name = "action" value = "inventory">Inventory</button>
-        <button type = "submit" name = "action" value = "quit">Quit</button>
+    <h1>{{ location['name'] }}</h1>
+    <p>{{ location['description'] }}</p>
+    <p>{{ message }}</p>
+
+    <!-- Form for direction buttons -->
+    <form method="POST" action="/">
+        <button type="submit" name="action" value="go north">Go North</button>
+        <button type="submit" name="action" value="go south">Go South</button>
+        <button type="submit" name="action" value="go east">Go East</button>
+        <button type="submit" name="action" value="go west">Go West</button>
     </form>
-    {% if 'items' in location and location.items %} <p>You see the following items:
-    </p>
-    <ul>
-        {% for item in location['itmes'] %} <li>{{ item }}</li>
-        {% endfor %}
-    </ul>
+
+    <!-- Form for other actions -->
+    <form method="POST" action="/">
+        <button type="submit" name="action" value="inventory">Check Inventory</button>
+        <button type="submit" name="action" value="take">Take Item</button>
+        <button type="submit" name="action" value="quit">Quit Game</button>
+    </form>
+
+    <!-- Display inventory if available -->
+    {% if inventory %}
+        <h2>Your Inventory:</h2>
+        <ul>
+            {% for item in inventory %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
     {% endif %}
-    <script scr = script.js></script>
 </body>
 </html>

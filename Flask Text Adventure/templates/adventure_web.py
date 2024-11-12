@@ -63,17 +63,39 @@ def show_current_location():
     return jsonify(location_data)
 
 def process_action(action):
-    '''Process the player's action and returns a jsonify response'''
+    '''Process the player's action and returns a JSON response'''
+    location = session['location']
+    inventory = session['inventory']
+
     if action == 'quit':
-        return jsonify({'message': 'You have quit the game.'})
-    elif action.startswith('go'):
-        pass  # Placeholder for 'go' action handling
-    elif action == 'take':
-        pass  # Placeholder for 'take' action handling
+        session['message'] = "You have quit the game."
+        return redirect(url_for('index'))
+
     elif action == 'inventory':
-        pass  # Placeholder for 'inventory' action handling
+        session['message'] = "Inventory checked."
+        # This will trigger the display of inventory in index.html
+        return redirect(url_for('index'))
+
+    elif action.startswith('go'):
+        direction = action.split()[1]  # Extract direction
+        new_location = move_player(direction)
+        if new_location != location:
+            session['location'] = new_location
+            session['message'] = f"You move {direction} to {locations[new_location]['name']}."
+        else:
+            session['message'] = "You cannot go that way."
+        return redirect(url_for('index'))
+
+    elif action == 'take':
+        item = "example_item"  # Replace with actual item logic if needed
+        take_item(item)
+        session['message'] = f"You have taken the {item}."
+        return redirect(url_for('index'))
+
     else:
-        return jsonify({'message': 'Invalid action.'})
+        session['message'] = "Invalid action."
+        return redirect(url_for('index'))
+
 
 def move_player(direction):
     '''Moves the player to a new location if possible'''
