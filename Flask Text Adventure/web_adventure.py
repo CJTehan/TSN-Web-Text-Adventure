@@ -117,8 +117,15 @@ def move_player(direction):
 
 def take_item(item):
     """Adds item to players inventory"""
-    current_location = session.get(location, location_items)
-    if item in locations[location] 
+    current_location = session.get('location', 'entrance')
+    if item in locations[current_location]['location_items']:
+        inventory = session.get('inventory',[])
+        inventory.append(item)
+        session['inventory'] = inventory
+        locations[current_location]['location_items'].remove(item)
+        return jsonify({'message': f'You take the {item}.', 'inventory':inventory})
+    else:
+        return jsonify({'message': 'There is no such item here.'}) 
 
 def show_inventory(inventory):
     """Displays the players inventory"""
