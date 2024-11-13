@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adventure Game</title>
+</head>
+<body>
+    <div id="location">
+        <h1 id="location-name">Starting Location</h1>
+        
+        <p id="location-description">You are in a mysterious forest. Paths lead in several directions.</p>
+        
+        <ul id="location-items"></ul>
+    </div>
+    
+    <div id="message"></div>
+    
+    <form id="action-form">
+        <input type="hidden" name="current_location" id="current-location" value="forest">
+        
+        <button type="button" onclick="go()">Go</button>
+        
+        <button type="button" onclick="move('north')" id="north-btn">North</button>
+        <button type="button" onclick="move('south')" id="south-btn" disabled>South</button>
+        <button type="button" onclick="move('east')" id="east-btn">East</button>
+        <button type="button" onclick="move('west')" id="west-btn" disabled>West</button>
+        
+        <button type="button" onclick="showInventory()">Inventory</button>
+        
+        <button type="button" onclick="quitGame()">Quit</button>
+    </form>
+    
+    <script>
+        const gameState = {
+            location: "forest",
+            directions: ["north", "east"],
+            items: ["map", "torch"],
+            inventory: []
+        };
+
+        function initialize() {
+            document.getElementById("location-name").textContent = "Starting Location";
+            document.getElementById("location-description").textContent = "You are in a mysterious forest. Paths lead in several directions.";
+            updateDirections();
+            updateItems();
+        }
+
+        function updateDirections() {
+            const directions = ["north", "south", "east", "west"];
+            directions.forEach(direction => {
+                const button = document.getElementById(`${direction}-btn`);
+                button.disabled = !gameState.directions.includes(direction);
+            });
+        }
+
+        function updateItems() {
+            const itemsList = document.getElementById("location-items");
+            itemsList.innerHTML = ""; 
+            gameState.items.forEach(item => {
+                const listItem = document.createElement("li");
+                listItem.textContent = item;
+                itemsList.appendChild(listItem);
+            });
+        }
+
+        function go() {
+            document.getElementById("message").textContent = "You decided to go on an adventure!";
+        }
+
+        function move(direction) {
+            if (gameState.directions.includes(direction)) {
+                document.getElementById("message").textContent = `You move ${direction}.`;
+                gameState.location = `location_${direction}`;
+                gameState.directions = ["south", "west"]; 
+                gameState.items = ["compass", "key"]; 
+                updateDirections();
+                updateItems();
+            } else {
+                document.getElementById("message").textContent = `You can't go ${direction} from here.`;
+            }
+        }
+
+        function showInventory() {
+            document.getElementById("message").textContent = `Inventory: ${gameState.inventory.join(", ") || "Empty"}`;
+        }
+
+        function quitGame() {
+            document.getElementById("message").textContent = "Game Over. Thanks for playing!";
+            document.getElementById("action-form").style.display = "none"; 
+        }
+
+        window.onload = initialize;
+    </script>
+</body>
+</html>
