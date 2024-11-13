@@ -10,24 +10,25 @@ locations = {
             'name': 'The Temple Entrance',
             'description': 'A grand archway leads into a dark and mysterious temple.',
             'directions':{'north': 'hallway'},
-            "location_items": ["key"]
+            "location_items": ["chest key"]
         },
         'hallway': {
             'name': 'a dimly lit Hallway',
             'description': 'Torches flicker on the walls, casting long shadows. There are doors to the east and west.',
             'directions': {'east': 'chamber', 'west': 'treasury', 'south': 'entrance'},
+            "location_items": ["gold coin"]
         },
         'chamber': {
             'name': 'The Treasury',
             'description': 'This is where the legendary teasure is said to be hidden!',
             'directions': {'east': 'hallway'},
-            # Add treasure and challenges here later
+            "location_items": ["health potion"]
         },
         'treasury':{
             'name': 'The legendary treasure',
             'description': 'You enter a large open room with a chest directly in the centre of the room with only the light from the moon lighting the ground in front of you, unaware of the dangers lurking in front of you.',
             'directions': {'west': 'hallway', 'north': 'mysterious statue', 'south': 'an open chest'},
-            "location_items": [""]
+            "location_items": ["sword of destiny"]
         },
     }
 
@@ -76,6 +77,8 @@ def show_current_location(location, locations):
     """Displays the players current location in the game"""
     location_data = locations[location].copy()
     location_data["current location"] = location
+    location_data["message"] = f"You have moved to {location_data["name"]}"
+    location_data["location_items"] = locations[location]["location_items"]
     return jsonify(location_data)
 
 def process_action(action):
@@ -89,20 +92,23 @@ def process_action(action):
         return show_current_location("entrance")
     if action == "quit":
         session.clear()
-        return jsonify({"message":"Thanks for playing!", redirect, "/", 'pause': 2})
+        return jsonify({"message":"Thanks for playing!", "redirect": "/", 'pause': 2})
         
     elif action.startswith("go"):
+        direction = action.split("", 1)[1].lower()
+        return move_player(direction)
         
-        
-    elif action == "take":
+    elif action == "get":
         # Button for get action
-
-
+        item =request.json.get("item")
+        if item:
+            return take_item(item)
+        return jsonify({"message": "Please specify an item to take."})
     elif action == "inventory":
-        # Button to open inventory
-
+        return show_inventory()
     else:
-        return jsonify({"message": "Invalid Action"})
+        return jsonify({"message": "Invalid action."})
+    # Added necessary action processing for the functionality of the user actions - Conor
 
 
 def move_player(direction):
