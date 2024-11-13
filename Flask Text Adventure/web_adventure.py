@@ -10,6 +10,7 @@ locations = {
             'name': 'The Temple Entrance',
             'description': 'A grand archway leads into a dark and mysterious temple.',
             'directions':{'north': 'hallway'},
+            "location_items": ["key"]
         },
         'hallway': {
             'name': 'a dimly lit Hallway',
@@ -26,15 +27,15 @@ locations = {
             'name': 'The legendary treasure',
             'description': 'You enter a large open room with a chest directly in the centre of the room with only the light from the moon lighting the ground in front of you, unaware of the dangers lurking in front of you.',
             'directions': {'west': 'hallway', 'north': 'mysterious statue', 'south': 'an open chest'},
+            "location_items": [""]
         },
-        
     }
 
 # Make a deep copy of the original locations to use for resetting
 original_locations = copy.deepcopy(locations)
 
 # --- Flask Routes ---
-@app.route("/", method = ["GET", "POST"])
+@app.route("/", methods = ["GET", "POST"])
 def index():
     # Intialise the game session
     if request.method == 'GET':
@@ -81,17 +82,17 @@ def process_action(action):
     """Process the players action and return a JSON response"""
     if action == 'restart':
         session.clear()
-        session['location'] = 'entrance'
+        session["location"] = "entrance"
 # Reset the game locations to their original state
         global locations
         locations = copy.deepcopy(original_locations)
-        return show_current_location('entrance')
+        return show_current_location("entrance")
     if action == "quit":
-        message = "Thanks for playing!"
+        session.clear()
+        return jsonify({"message":"Thanks for playing!", redirect, "/", 'pause': 2})
         
     elif action.startswith("go"):
-        direction = action.split()[-1]
-        app.route("/")
+        
         
     elif action == "take":
         # Button for get action
@@ -116,12 +117,8 @@ def move_player(direction):
 
 def take_item(item):
     """Adds item to players inventory"""
-    if "items" in locations[location] and item in current_location[current_location]["items"]:
-        iventory.append(item)
-        locations[location]["items"].remove(item)
-        return jsonify("You take the", item)
-    else:
-        return jsonify("message": "There is no such item here.")
+    current_location = session.get(location, location_items)
+    if item in locations[location] 
 
 def show_inventory(inventory):
     """Displays the players inventory"""
