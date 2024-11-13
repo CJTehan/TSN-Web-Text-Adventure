@@ -1,3 +1,4 @@
+import copy 
 from flask import Flask, render_template, request, session, jsonify, redirect, url_for
 
 app = Flask(__name__)
