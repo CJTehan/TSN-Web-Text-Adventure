@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Adventure Game</title>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <link rel = "stylesheet" href = "style.css">
+    <link rel = "stylesheet" href = "style.css"> 
 </head>
 <body>
     <div id="location">
@@ -29,7 +29,7 @@
             <button type="button" data-action="Go East" {% if 'east' not in location.directions %}disabled{% endif %}>Go East</button>
             <button type="button" data-action="Go West" {% if 'west' not in location.directions %}disabled{% endif %}>Go West</button>
         </div>
-        <!-- Get Item Button -->
+        <!-- Get Item Button for player to collect item -->
         <div>
             <button type="button" data-action="get">Get</button>
         </div>
