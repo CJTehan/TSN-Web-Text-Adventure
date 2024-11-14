@@ -6,24 +6,23 @@ body
     
 }
 
+h1,
+p
+{
+    padding: 20;
+}
 h1
 {
     font-size: xx-large;
     font-style: italic;
-    color: lightblue;
-}
-
-h2
-{
-    font-size: large;
-    font-weight: 400;
     color: cyan;
+    font-weight: 600;
 }
 
 
 p
 {
     font-size: medium;
-    color: white;
+    color: lightblue;
     font-variant: small-caps;
 }

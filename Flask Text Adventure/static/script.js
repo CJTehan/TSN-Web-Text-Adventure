@@ -67,6 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     } else {
-        console.error("actionForm element not found.");
+        console.error("actionForm element not found, try again.");
     }
 });
