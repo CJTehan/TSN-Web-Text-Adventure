@@ -17,7 +17,7 @@ locations = {
             "name": "A Dimly Lit Hallway",
             "description": "Torches flicker on the walls, casting long shadows as the walls begin to expand. There are doors to the east and west with faint sounds of rustling leaves as you move further from the entrance.",
             "directions": {"east": "chamber", "west": "treasury", "south": "entrance", "north": "mysterious statue"},
-            "location_items": ["gold coin"],
+            "location_items": ["gold coin", "torch"],
         },
         
         "chamber": {
@@ -62,9 +62,11 @@ def index():
         session["location"] = "entrance"
         session["inventory"] = []
         session["message"] = ""
+
         print("Initial location data being passed to template:", locations["entrance"])
         print("Type of location items:", type(locations["entrance"]["location_items"]))
-        return render_template("index.html", location=locations["entrance"], inventory=session["inventory"], message="")
+        intro_message = show_intro() # Call show intro to display the message
+        return render_template("index.html", location=locations["entrance"], inventory=session["inventory"], message=intro_message)
     elif request.method == "POST":
         data = request.get_json()  # Use get_json() to read JSON data
         action = data.get("action") if data else None
@@ -84,25 +86,24 @@ def background_image():
 def show_intro():
     """Displays the games intro"""
     message = "\nWelcome to Journey to the Temple of Secrets!\n" \
-        "You are an intrepid explorer seeking a legendary treasure hidden deep within an ancient temple.\n"
+        "You are an intrepid explorer seeking a legendary treasure hidden deep within an ancient temple.\n" \
     "You journey will be filled with hidden dangers lurking at every corner.\n" \
-    "There will be unfathomable challenges you will encounter and tough decisions you will have to make.\n"
+    "There will be unfathomable challenges you will encounter and tough decisions you will have to make.\n" \
     "Will you survive the temple or will you fall at the edge of the bountiful treasures hidden within?\n" \
-    "Good Luck Adventurer! May the gods favour your journey\n"
-    return jsonify({"message": message}) # Return a JSON response
-
+    "Good Luck Adventurer! May the gods favour your journey\n" 
+    return message
 # The current room with added changes trying to get the function to work through the page
 def show_current_location(location):
     """Displays the players current location in the game"""
     location_data = locations[location].copy()
     location_data["current_location"] = location
-    location_data["message"] = f"You have moved to {location_data["name"]}" # Adding a message
-    location_data["location_items"] = locations[location]["location_items"]
+    location_data["message"] = f"You have moved to {location_data['name']}" # Adding a message
+    location_data["items"] = locations[location]["location_items"]
     return jsonify(location_data) # Return a JSON Response
     
 def process_action(action):
     """Process the players action and return a JSON response"""
-    print(f"Processing actiong: {action}")
+    print(f"Processing action: {action}")
 
     if action == "Test Action":
         return jsonify({"message": "Test action received successfully."})

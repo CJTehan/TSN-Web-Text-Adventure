@@ -6,11 +6,14 @@
         <script src="{{ url_for('static', filename='script.js') }}"></script>
         <link rel = "stylesheet" href = "{{ url_for('static', filename= 'style.css') }}"> 
     </head>
-<body>
-    <div id="location">
-        <h1 id="location-name">{{ location.name }}</h1>
+    <body>
+        <div id="location">
+            <h1 id="location-name">{{ location.name }}</h1>
+            <!--Displays the intro to the game-->
+            <div id="message">{{ message }}</div>
         <p id="location-description">{{ location.description }}</p>
         <ul id="location-items">
+            <h2>Location Items:</h2>
             {% if location.location_items %}
             {% for item in location.location_items %}
             <li>{{ item }}</li>
@@ -20,7 +23,6 @@
             {% endif %}
         </ul>
     </div>
-    <div id="message">{{ message }}</div>
     <!-- Movement Buttons -->
     <form id="action-form">
         <div>
