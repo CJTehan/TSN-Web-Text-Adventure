@@ -8,35 +8,45 @@ app.secret_key = "y98hdnwP702&*%£poi"
 locations = {
     "entrance":{
             "name": "The Temple Entrance",
-            "description": "A grand archway leads into a dark and mysterious temple.",
+            "description": "A grand archway leads into a dark and mysterious temple, the moon iluminates the path forward but the eery sounds coming from inside send a shive down your spine.",
             "directions":{"north": "hallway"},
-            "location_items": ["chest key"]
+            "location_items": ["chest key"],
         },
+        
         "hallway": {
             "name": "A Dimly Lit Hallway",
-            "description": "Torches flicker on the walls, casting long shadows. There are doors to the east and west.",
-            "directions": {"east": "chamber", "west": "treasury", "south": "entrance"},
-            "location_items": ["gold coin"]
+            "description": "Torches flicker on the walls, casting long shadows as the walls begin to expand. There are doors to the east and west with faint sounds of rustling leaves as you move further from the entrance.",
+            "directions": {"east": "chamber", "west": "treasury", "south": "entrance", "north": "mysterious statue"},
+            "location_items": ["gold coin"],
         },
+        
         "chamber": {
             "name": "A Large and Mysterious Chamber",
             "description": "This is approaching where the legendary treasure is said to be hidden but beware the potential dangers!",
-            "directions": {"east": "hallway", "north": "temple throne"},
-            "location_items": []
+            "directions": {"east": "hallway", "north": "temple throne", "west": "crypt"},
+            "location_items": ["a torn letter"],
         },
         
         "temple throne":{
             "name": "The Legendary Treasure",
             "description": "You enter a large open room with a chest directly in the centre of the room with only the light from the moon lighting the ground in front of you, unaware of the dangers lurking in front of you.",
             "directions": {"west": "hallway", "north": "mysterious statue", "south": "an open chest"},
-            "location_items": ["sword of destiny"]
+            "location_items": ["sword of destiny"],
         },
+        
         "mysterious statue":{
             "name": "The Great Azia Statue",
             "description": "The room goes dark as a massive shadow reaches over you, you shine a torch and see the colossal figure in front of you, the great sun king Azia",
             "directions": {"south": "temple throne", "west": "An open door", "north": "Secret pathway"},
-            "location_items": ["golden idle", "scripture of life", "mysterious tablet"]
+            "location_items": ["golden idle"],
         },
+
+        "treasury":{
+            "name": "The Kingdoms Bounties",
+            "description": "You enter a large room filled with what looks to be remains, it looks empty as you emerge but then you see evidence of great riches that once belonged here, with just a single gem remaining on the floor",
+            "directions": {"east": "hallway", "west": "A locked door", "south": "mysterious statue"},
+            "location_items": ["A mysterious gem"],
+        }
 
     }
 
@@ -67,14 +77,18 @@ def index():
         else:
             return jsonify({"message": "Action could not be processed."}), 500
 
-
+app.route("/")
+def background_image():
+    return render_template("index.html", bg_class = "imageclass")
 # --- Game Function ---
 def show_intro():
     """Displays the games intro"""
-    message = "\nWelcome to the Adventure of the Hidden Treasure!\n" \
-        "You are an intrepid explorer seeing a legendary treasure hidden deep within an ancient temple.\n"
-    "Your journey will be fraught with peril, but the rewards are immeasurable.\n" \
-    "Good Luck!\n"
+    message = "\nWelcome to Journey to the Temple of Secrets!\n" \
+        "You are an intrepid explorer seeking a legendary treasure hidden deep within an ancient temple.\n"
+    "You journey will be filled with hidden dangers lurking at every corner.\n" \
+    "There will be unfathomable challenges you will encounter and tough decisions you will have to make.\n"
+    "Will you survive the temple or will you fall at the edge of the bountiful treasures hidden within?\n" \
+    "Good Luck Adventurer! May the gods favour your journey\n"
     return jsonify({"message": message}) # Return a JSON response
 
 # The current room with added changes trying to get the function to work through the page
@@ -104,7 +118,7 @@ def process_action(action):
         return show_current_location("entrance")
     elif action == "quit":
         session.clear()
-        return jsonify({"message":"Thanks for playing!", "redirect": "/", "pause": 2})
+        return jsonify({"message":"Thanks for playing!", "redirect": "/", "pause": 4})
         
     elif action.startswith("Go "): # Detect the users actions
         direction = action.split(" ", 1)[1].lower()
