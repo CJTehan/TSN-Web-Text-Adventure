@@ -1,0 +1,73 @@
+body
+{
+    font-size: 20pt;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: palegreen;
+    background-image: url("ancient-temple.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1
+{
+    font-family: fantasy;
+    font-size: 40pt;
+    font-style: italic;
+    color: lightskyblue;
+    font-weight: 800;
+    text-align: center;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-width: 1px;
+}
+
+
+p
+{
+    font-size: 28pt;
+    color: firebrick;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    font-variant: "wdth" = 50, "wght" = 300;
+    font-style: oblique 30deg;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+form
+{
+    font-size: 18pt;
+    font-family:'Courier New', Courier, monospace;
+    color: black;
+    border: medium;
+    padding: 20px;
+    text-align: center;
+    text-decoration: wavy;
+    font-size: 18px;
+    margin: 6px 3px;
+}
+
+ul
+{
+    font-size: 24pt;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+    -webkit-text-stroke-width: 0.5pt;
+    -webkit-text-stroke-color: black;
+    text-align: center;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: small-caps;
+}
+
+button
+{
+    text-align: center;
+    color: aqua;
+    font-family: 'Courier New', Courier, monospace;
+    border: 10px;
+    text-decoration: dashed;
+    -webkit-text-stroke-color: white;
+    -webkit-text-stroke-width: 0.5pt;
+    font-size: 16pt;
+    background-color: black;
+}
